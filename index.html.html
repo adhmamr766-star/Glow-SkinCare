@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>روعة البشرة | Glow SkinCare</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Alpine.js for interactive state management -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        },
+                        cream: {
+                            50: '#faf8f5',
+                            100: '#f4efe6',
+                            200: '#e8ddcb',
+                        },
+                        mint: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                        },
+                        gold: {
+                            DEFAULT: '#d4af37',
+                            light: '#f3e5ab',
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS Styles -->
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #faf8f5;
+            color: #332d2b;
+            overflow-x: hidden;
+        }
+        
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f4efe6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fda4af;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #fb7185;
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* Badge pulse animation */
+        @keyframes badge-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .pulse-badge {
+            animation: badge-pulse 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body x-data="shopApp()" class="smooth-scroll flex flex-col min-h-screen">
+
+    <div class="bg-gradient-to-r from-rose-400 via-rose-300 to-rose-400 text-white text-center py-2 px-4 text-xs md:text-sm font-semibold tracking-wide shadow-sm">
+        <i class="fas fa-gift ml-2"></i>
+        شحن مجاني للطلبات الأكبر من 350 جنيه | استخدم كود <span class="bg-white text-rose-500 px-2 py-0.5 rounded-full font-bold mx-1">GLOW2026</span> للحصول على خصم 15%
+    </div>
+
+    <header class="sticky top-0 z-40 glass border-b border-rose-100/60 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-gray-700 hover:text-rose-500 focus:outline-none">
+                        <i class="fas" :class="mobileMenuOpen ? 'fa-times text-xl' : 'fa-bars text-xl'"></i>
+                    </button>
+                    <a href="#" class="flex items-center gap-2 group">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-400 to-rose-200 flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform">
+                            <i class="fas fa-sparkles text-lg"></i>
+                        </div>
+                        <span class="text-2xl font-black bg-gradient-to-r from-rose-600 via-rose-500 to-rose-400 bg-clip-text text-transparent font-tajawal">
+                            جلو سكين<span class="text-xs block font-normal text-gray-500 tracking-widest -mt-1">GLOW SKINCARE</span>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Navigation Links (Desktop) -->
+                <nav class="hidden md:flex space-x-reverse space-x-8 font-medium text-gray-700">
+                    <a href="#featured" class="hover:text-rose-500 transition-colors py-2 border-b-2 border-transparent hover:border-rose-400">الرئيسية</a>
+                    <a href="#products" @click="selectedCategory = 'all'" class="hover:text-rose-500 transition-colors py-2 border-b-2 border-transparent hover:border-rose-400">المنتجات</a>
+                    <a href="#products" @click="selectedCategory = 'face'" class="hover:text-rose-500 transition-colors py-2 border-b-2 border-transparent hover:border-rose-400">العناية بالوجه</a>
+                    <a href="#products" @click="selectedCategory = 'serum'" class="hover:text-rose-500 transition-colors py-2 border-b-2 border-transparent hover:border-rose-400">السيروم</a>
+                    <a href="#products" @click="selectedCategory = 'sunscreen'" class="hover:text-rose-500 transition-colors py-2 border-b-2 border-transparent hover:border-rose-400">واقي الشمس</a>
+                    <a href="#quiz" class="text-rose-600 font-bold hover:text-rose-700 transition-colors py-2 flex items-center gap-1">
+                        <i class="fas fa-wand-magic-sparkles text-sm"></i>
+                        مستشار البشرة
+                    </a>
+                </nav>
+
+                <!-- Search & Actions -->
+                <div class="flex items-center gap-3">
+                    <!-- Search Input (Desktop) -->
+                    <div class="relative hidden sm:block w-48 lg:w-64">
+                        <input type="text" x-model="searchQuery" placeholder="ابحثي عن منتج..." 
+                            class="w-full pl-9 pr-4 py-2 text-sm bg-rose-50/50 border border-rose-200 rounded-full focus:outline-none focus:ring-2 focus:ring-rose-400 focus:bg-white transition-all">
+                        <i class="fas fa-search absolute left-3 top-2.5 text-rose-300"></i>
+                    </div>
+
+                    <!-- Cart Trigger Button -->
+                    <button @click="cartOpen = true" class="relative p-2.5 text-gray-700 hover:text-rose-500 bg-rose-50 hover:bg-rose-100 rounded-full transition-all focus:outline-none shadow-sm">
+                        <i class="fas fa-shopping-bag text-lg"></i>
+                        <span x-show="cartCount > 0" x-text="cartCount" 
+                            class="absolute -top-1 -right-1 bg-rose-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar Mobile -->
+            <div class="sm:hidden pb-3 pt-1">
+                <div class="relative w-full">
+                    <input type="text" x-model="searchQuery" placeholder="ابحثي عن منتج..." 
+                        class="w-full pl-9 pr-4 py-2 text-sm bg-rose-50/60 border border-rose-200 rounded-full focus:outline-none focus:ring-2 focus:ring-rose-400">
+                    <i class="fas fa-search absolute left-3 top-2.5 text-rose-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div x-show="mobileMenuOpen" x-transition class="md:hidden bg-white border-b border-rose-100 px-4 pt-2 pb-4 space-y-2">
+            <a href="#featured" @click="mobileMenuOpen = false" class="block py-2 text-gray-700 hover:text-rose-500 font-medium">الرئيسية</a>
+            <a href="#products" @click="selectedCategory = 'all'; mobileMenuOpen = false" class="block py-2 text-gray-700 hover:text-rose-500 font-medium">جميع المنتجات</a>
+            <a href="#products" @click="selectedCategory = 'face'; mobileMenuOpen = false" class="block py-2 text-gray-700 hover:text-rose-500 font-medium">العناية بالوجه</a>
+            <a href="#products" @click="selectedCategory = 'serum'; mobileMenuOpen = false" class="block py-2 text-gray-700 hover:text-rose-500 font-medium">السيروم والرطوبة</a>
+            <a href="#products" @click="selectedCategory = 'sunscreen'; mobileMenuOpen = false" class="block py-2 text-gray-700 hover:text-rose-500 font-medium">واقي الشمس</a>
+            <a href="#products" @click="selectedCategory = 'body'; mobileMenuOpen = false" class="block py-2 text-gray-700 hover:text-rose-500 font-medium">العناية بالجسم</a>
+            <a href="#quiz" @click="mobileMenuOpen = false" class="block py-2 text-rose-600 font-bold">اختبار تحديد نوع البشرة</a>
+        </div>
+    </header>
+
+    <section id="featured" class="relative overflow-hidden bg-gradient-to-b from-rose-100/50 via-cream-50 to-cream-50 py-12 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                
+                <!-- Hero Content -->
+                <div class="space-y-6 text-center md:text-right">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-200/60 text-rose-800 text-xs sm:text-sm font-semibold tracking-wide">
+                        <i class="fas fa-sparkles text-rose-500"></i> تركيبات طبيعية 100% ومعتمدة
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
+                        إشراقة طبيعية <br>
+                        <span class="bg-gradient-to-r from-rose-500 via-rose-400 to-rose-600 bg-clip-text text-transparent">تُبرز جمال بشرتك النقي</span>
+                    </h1>
+                    <p class="text-gray-600 text-base sm:text-lg max-w-xl mx-auto md:mx-0 leading-relaxed">
+                        اكتشفي تشكيلتنا الفاخرة المبتكرة خصيصاً لتغدية جميع أنواع البشرة، المصممة بأعلى معايير الجودة بمكونات طبيعية تمنحك النضارة والترطيب الذي تستحقينه.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-4">
+                        <a href="#products" class="w-full sm:w-auto text-center px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2">
+                            <span>تسوقي الآن</span>
+                            <i class="fas fa-arrow-left text-sm"></i>
+                        </a>
+                        <a href="#quiz" class="w-full sm:w-auto text-center px-8 py-4 bg-white border border-rose-300 text-rose-700 hover:bg-rose-50 font-bold rounded-full shadow-sm transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-wand-magic-sparkles text-rose-400"></i>
+                            <span>اعرفي نوع بشرتك</span>
+                        </a>
+                    </div>
+
+                    <!-- Trust Stats -->
+                    <div class="pt-8 border-t border-rose-200/60 grid grid-cols-3 gap-4 text-center md:text-right">
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800">+10,000</p>
+                            <p class="text-xs text-gray-500">عميلة سعيدة</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800">100%</p>
+                            <p class="text-xs text-gray-500">منتجات أصلية</p>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-gray-800">4.9 ★</p>
+                            <p class="text-xs text-gray-500">تقييم العملاء</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Image Showcase -->
+                <div class="relative flex justify-center">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-rose-300 to-rose-200 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                    <div class="relative bg-white/40 p-4 rounded-3xl border border-white/60 shadow-2xl backdrop-blur-sm max-w-md">
+                        <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=800&q=80" 
+                             alt="منتجات العناية بالبشرة" 
+                             class="rounded-2xl object-cover h-[380px] sm:h-[450px] w-full shadow-md"
+                             onerror="this.src='https://placehold.co/600x800/fecdd3/881337?text=Glow+SkinCare'">
+                        
+                        <!-- Floating Badge -->
+                        <div class="absolute -bottom-5 -right-5 bg-white p-4 rounded-2xl shadow-xl border border-rose-100 flex items-center gap-3">
+                            <div class="w-12 h-12 bg-mint-100 rounded-full flex items-center justify-center text-mint-500 text-xl font-bold">
+                                <i class="fas fa-leaf"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">تركيبة متطورة</p>
+                                <p class="text-sm font-bold text-gray-800">خالي من Parabens & Sulfate</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-10 bg-white border-y border-rose-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                
+                <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-rose-50/50 transition-colors">
+                    <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fas fa-truck-fast"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-gray-800">توصيل سريع</h4>
+                        <p class="text-xs text-gray-500">خلال 24-48 ساعة لجميع المحافظات</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-rose-50/50 transition-colors">
+                    <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-gray-800">منتجات أصلية 100%</h4>
+                        <p class="text-xs text-gray-500">مضمونة ومفحوصة طبياً</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-rose-50/50 transition-colors">
+                    <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-gray-800">الدفع عند الاستلام</h4>
+                        <p class="text-xs text-gray-500">أو عن طريق بطاقات الائتمان</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-rose-50/50 transition-colors">
+                    <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl flex-shrink-0">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-gray-800">دعم متواصل</h4>
+                        <p class="text-xs text-gray-500">استشارات مجانية مع خبراء البشرة</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="quiz" class="py-14 bg-gradient-to-r from-rose-50 via-cream-100 to-rose-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-rose-100 text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-rose-200/40 rounded-full blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-rose-300/30 rounded-full blur-2xl"></div>
+
+                <span class="inline-block px-3 py-1 bg-rose-100 text-rose-600 rounded-full text-xs font-bold mb-3">
+                    <i class="fas fa-lightbulb ml-1"></i> أداة تحليل البشرة
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-2">مستشار البشرة الذكي</h2>
+                <p class="text-gray-600 text-sm mb-8">اختاري نوع بشرتك للحصول على توصية فورية بالمنتجات الأكثر ملاءمة احتياجاتك</p>
+
+                <!-- Skin Type Selector Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                    <template x-for="type in skinTypes" :key="type.id">
+                        <button @click="quizSkinType = type.id" 
+                            :class="quizSkinType === type.id ? 'border-rose-500 bg-rose-50 ring-2 ring-rose-300' : 'border-gray-200 bg-white hover:border-rose-200'"
+                            class="p-4 rounded-2xl border transition-all text-center flex flex-col items-center justify-center gap-2 group">
+                            <span class="text-3xl" x-text="type.icon"></span>
+                            <span class="font-bold text-sm text-gray-800 group-hover:text-rose-600" x-text="type.name"></span>
+                            <span class="text-xs text-gray-500" x-text="type.desc"></span>
+                        </button>
+                    </template>
+                </div>
+
+                <!-- Quiz Recommendation Result -->
+                <div x-show="quizSkinType !== null" x-transition class="p-6 bg-rose-50/70 rounded-2xl border border-rose-200/60 text-right">
+                    <h4 class="font-bold text-rose-800 text-lg mb-2 flex items-center gap-2">
+                        <i class="fas fa-check-circle text-rose-500"></i>
+                        التوصية المخصصة لبشرتك (<span x-text="getSkinTypeName(quizSkinType)"></span>):
+                    </h4>
+                    <p class="text-sm text-gray-600 mb-4" x-text="getSkinTypeAdvice(quizSkinType)"></p>
+                    
+                    <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                        <button @click="filterBySkinType(quizSkinType)" class="px-6 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-full text-sm font-bold transition-all shadow-md">
+                            عرض المنتجات الموصى بها (<span x-text="getRecommendedProducts(quizSkinType).length"></span>)
+                        </button>
+                        <button @click="quizSkinType = null" class="text-xs text-gray-500 hover:text-rose-600 underline">إعادة الاختبار</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-grow">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+                <span class="text-rose-500 text-xs font-bold uppercase tracking-wider">مجموعتنا الحصرية</span>
+                <h2 class="text-3xl font-extrabold text-gray-900 mt-1">منتجات العناية بالبشرة</h2>
+            </div>
+
+            <!-- Categories Tabs -->
+            <div class="flex flex-wrap gap-2">
+                <button @click="selectedCategory = 'all'" 
+                    :class="selectedCategory === 'all' ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-rose-50 border border-gray-200'"
+                    class="px-4 py-2 rounded-full text-sm font-medium transition-all">الكل</button>
+                <button @click="selectedCategory = 'face'" 
+                    :class="selectedCategory === 'face' ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-rose-50 border border-gray-200'"
+                    class="px-4 py-2 rounded-full text-sm font-medium transition-all">العناية بالوجه</button>
+                <button @click="selectedCategory = 'serum'" 
+                    :class="selectedCategory === 'serum' ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-rose-50 border border-gray-200'"
+                    class="px-4 py-2 rounded-full text-sm font-medium transition-all">سيروم ورطوبة</button>
+                <button @click="selectedCategory = 'sunscreen'" 
+                    :class="selectedCategory === 'sunscreen' ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-rose-50 border border-gray-200'"
+                    class="px-4 py-2 rounded-full text-sm font-medium transition-all">واقي الشمس</button>
+                <button @click="selectedCategory = 'body'" 
+                    :class="selectedCategory === 'body' ? 'bg-rose-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-rose-50 border border-gray-200'"
+                    class="px-4 py-2 rounded-full text-sm font-medium transition-all">العناية بالجسم</button>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <template x-for="product in filteredProducts" :key="product.id">
+                <div class="bg-white rounded-3xl overflow-hidden border border-rose-100 hover:border-rose-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group">
+                    
+                    <!-- Product Image Container -->
+                    <div class="relative overflow-hidden bg-rose-50/30 h-64 cursor-pointer" @click="openQuickView(product)">
+                        <img :src="product.image" :alt="product.title" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/400x500/fecdd3/881337?text=Glow+Skin'">
+                        
+                        <!-- Discount Badge -->
+                        <template x-if="product.discount">
+                            <span class="absolute top-3 right-3 bg-rose-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md"
+                                  x-text="'-' + product.discount + '%'"></span>
+                        </template>
+
+                        <!-- Best Seller Tag -->
+                        <template x-if="product.isBestSeller">
+                            <span class="absolute top-3 left-3 bg-amber-400 text-gray-900 text-xs font-bold px-2.5 py-1 rounded-full shadow-md">
+                                <i class="fas fa-crown text-xs ml-1"></i> الأكثر مبيعاً
+                            </span>
+                        </template>
+
+                        <!-- Quick View Hover Overlay -->
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-white/90 text-gray-800 text-xs font-bold px-4 py-2 rounded-full shadow-lg backdrop-blur-sm">
+                                <i class="fas fa-eye ml-1"></i> معاينة السريعة
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Product Content -->
+                    <div class="p-5 flex-grow flex flex-col justify-between">
+                        <div>
+                            <!-- Category & Rating -->
+                            <div class="flex items-center justify-between text-xs mb-2">
+                                <span class="text-rose-500 font-semibold" x-text="getCategoryLabel(product.category)"></span>
+                                <div class="flex items-center text-amber-400">
+                                    <i class="fas fa-star text-xs"></i>
+                                    <span class="text-gray-600 font-bold mr-1" x-text="product.rating"></span>
+                                    <span class="text-gray-400 text-[10px]" x-text="'(' + product.reviewsCount + ')'"></span>
+                                </div>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="font-bold text-gray-800 text-base mb-1 hover:text-rose-500 cursor-pointer transition-colors" 
+                                @click="openQuickView(product)" 
+                                x-text="product.title"></h3>
+                            
+                            <!-- Benefits snippet -->
+                            <p class="text-xs text-gray-500 line-clamp-2 mb-3" x-text="product.benefits"></p>
+                        </div>
+
+                        <!-- Price & Add to Cart Action -->
+                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between mt-2">
+                            <div>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="font-extrabold text-rose-600 text-lg" x-text="product.price"></span>
+                                    <span class="text-xs font-medium text-gray-500">ج.م</span>
+                                </div>
+                                <template x-if="product.originalPrice">
+                                    <span class="text-xs text-gray-400 line-through" x-text="product.originalPrice + ' ج.م'"></span>
+                                </template>
+                            </div>
+
+                            <button @click="addToCart(product)" 
+                                    class="p-2.5 bg-rose-100 hover:bg-rose-500 text-rose-600 hover:text-white rounded-2xl transition-all duration-200 active:scale-95 shadow-sm">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Empty State Search Result -->
+        <div x-show="filteredProducts.length === 0" class="text-center py-16">
+            <i class="fas fa-search text-5xl text-rose-200 mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-700">لم نتمكن من العثور على منتجات</h3>
+            <p class="text-sm text-gray-500 mt-1">جربي البحث بكلمات أخرى أو اختر فئة مختلفة</p>
+            <button @click="searchQuery = ''; selectedCategory = 'all'" class="mt-4 px-6 py-2 bg-rose-500 text-white rounded-full text-sm font-bold">
+                إعادة ضبط البحث
+            </button>
+        </div>
+
+    </section>
+
+    <section class="py-14 bg-white border-t border-rose-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <span class="text-rose-500 text-xs font-bold uppercase">تجارب حقيقية</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-800 mt-1">ماذا تقول خبيرات الجمال عن منتجاتنا؟</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div class="bg-rose-50/40 p-6 rounded-3xl border border-rose-100 relative">
+                    <div class="flex items-center gap-1 text-amber-400 mb-3">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">"سيروم الهيالورونيك أسيد غير روتين العناية بوجودتي تماماً! بشرتي أصبحت أكثر ترطيباً ونضارة من أول أسبوع."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-rose-200 flex items-center justify-center font-bold text-rose-700">
+                            س
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-gray-800">سارة محمود</p>
+                            <p class="text-xs text-gray-400">عميلة موثوقة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-rose-50/40 p-6 rounded-3xl border border-rose-100 relative">
+                    <div class="flex items-center gap-1 text-amber-400 mb-3">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">"واقي الشمس خفيف جداً ولا يترك أي طبقة بيضاء، ممتزة جداً تحت المكياج وأنصح به لجميع صاحبات البشرة الدهنية."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-rose-200 flex items-center justify-center font-bold text-rose-700">
+                            ن
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-gray-800">نورهان علي</p>
+                            <p class="text-xs text-gray-400">عميلة موثوقة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-rose-50/40 p-6 rounded-3xl border border-rose-100 relative">
+                    <div class="flex items-center gap-1 text-amber-400 mb-3">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">"سرعة الشحن والتغليف الأنيق جداً أعجبوني، والمنتجات جودتها عالية وبدون معطرات صناعية تسبب حساسية."</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-rose-200 flex items-center justify-center font-bold text-rose-700">
+                            م
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-gray-800">مريم كمال</p>
+                            <p class="text-xs text-gray-400">عميلة موثوقة</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div x-show="cartOpen" class="relative z-50" x-cloak>
+        <!-- Overlay -->
+        <div x-show="cartOpen" x-transition.opacity class="fixed inset-0 bg-black/40 backdrop-blur-sm" @click="cartOpen = false"></div>
+
+        <div class="fixed inset-y-0 left-0 max-w-full flex">
+            <div x-show="cartOpen" x-transition:enter="transform transition ease-in-out duration-300"
+                 x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transform transition ease-in-out duration-300"
+                 x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
+                 class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                
+                <!-- Cart Header -->
+                <div class="p-5 border-b border-rose-100 flex items-center justify-between bg-rose-50/50">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-shopping-bag text-rose-500 text-lg"></i>
+                        <h3 class="font-extrabold text-gray-800 text-lg">سلة التسوق (<span x-text="cartCount"></span>)</h3>
+                    </div>
+                    <button @click="cartOpen = false" class="text-gray-400 hover:text-gray-600 p-1">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items List -->
+                <div class="flex-grow overflow-y-auto p-5 space-y-4">
+                    <template x-if="cart.length === 0">
+                        <div class="text-center py-12">
+                            <i class="fas fa-basket-shopping text-5xl text-rose-200 mb-3"></i>
+                            <p class="text-gray-500 text-sm">سلتك فارغة حالياً</p>
+                            <button @click="cartOpen = false" class="mt-4 px-6 py-2 bg-rose-500 text-white rounded-full text-xs font-bold">
+                                ابدأي التسوق
+                            </button>
+                        </div>
+                    </template>
+
+                    <template x-for="item in cart" :key="item.id">
+                        <div class="flex gap-4 p-3 bg-rose-50/30 rounded-2xl border border-rose-100/60 items-center">
+                            <img :src="item.image" :alt="item.title" class="w-16 h-16 object-cover rounded-xl border border-white">
+                            <div class="flex-grow">
+                                <h4 class="font-bold text-sm text-gray-800 line-clamp-1" x-text="item.title"></h4>
+                                <p class="text-xs text-rose-600 font-bold mt-1" x-text="item.price + ' ج.م'"></p>
+                                
+                                <!-- Quantity Controls -->
+                                <div class="flex items-center gap-2 mt-2">
+                                    <button @click="updateQuantity(item.id, -1)" class="w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-xs text-gray-600 hover:bg-rose-100">
+                                        <i class="fas fa-minus text-[10px]"></i>
+                                    </button>
+                                    <span class="text-xs font-bold text-gray-700 w-4 text-center" x-text="item.quantity"></span>
+                                    <button @click="updateQuantity(item.id, 1)" class="w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-xs text-gray-600 hover:bg-rose-100">
+                                        <i class="fas fa-plus text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button @click="removeFromCart(item.id)" class="text-gray-400 hover:text-rose-500 p-1">
+                                <i class="fas fa-trash-can text-sm"></i>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Cart Footer & Total Summary -->
+                <div x-show="cart.length > 0" class="p-5 border-t border-rose-100 bg-white space-y-3">
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>المجموع الفرعي:</span>
+                        <span class="font-bold text-gray-800" x-text="cartSubtotal + ' ج.م'"></span>
+                    </div>
+                    <div class="flex justify-between text-sm text-gray-600">
+                        <span>مصاريف الشحن:</span>
+                        <span class="font-bold text-mint-500" x-text="cartSubtotal >= 350 ? 'مجاني' : '35 ج.م'"></span>
+                    </div>
+                    <div class="flex justify-between text-base font-extrabold text-gray-900 pt-2 border-t border-gray-100">
+                        <span>الإجمالي:</span>
+                        <span class="text-rose-600" x-text="cartTotal + ' ج.م'"></span>
+                    </div>
+
+                    <button @click="checkoutModalOpen = true; cartOpen = false" 
+                            class="w-full py-3.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        <span>متابعة إتمام الطلب</span>
+                        <i class="fas fa-arrow-left text-xs"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div x-show="checkoutModalOpen" class="relative z-50" x-cloak>
+        <div x-show="checkoutModalOpen" x-transition.opacity class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="checkoutModalOpen = false"></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div class="relative transform overflow-hidden rounded-3xl bg-white text-right shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg p-6 sm:p-8">
+                    
+                    <button @click="checkoutModalOpen = false" class="absolute top-5 left-5 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+
+                    <h3 class="text-xl font-extrabold text-gray-800 mb-1 flex items-center gap-2">
+                        <i class="fas fa-clipboard-check text-rose-500"></i> إتمام الطلب
+                    </h3>
+                    <p class="text-xs text-gray-500 mb-6">يرجى إدخال بيانات التوصيل لإكمال طلبك بنجاح</p>
+
+                    <form @submit.prevent="submitOrder" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">الاسم بالكامل</label>
+                            <input type="text" x-model="checkoutForm.name" required placeholder="مثال: أمل أحمد" 
+                                   class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">رقم الهاتف</label>
+                            <input type="tel" x-model="checkoutForm.phone" required placeholder="01xxxxxxxxx" 
+                                   class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">عنوان التوصيل التفصيلي</label>
+                            <textarea x-model="checkoutForm.address" required rows="2" placeholder="اسم الشارع، رقم المبنى، الشقة، المدينة" 
+                                      class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1">طريقة الدفع</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <label class="border rounded-xl p-3 flex items-center gap-2 cursor-pointer hover:bg-rose-50" :class="checkoutForm.payment === 'cod' ? 'border-rose-500 bg-rose-50/50' : 'border-gray-200'">
+                                    <input type="radio" x-model="checkoutForm.payment" value="cod" class="text-rose-500">
+                                    <span class="text-xs font-bold text-gray-700">الدفع عند الاستلام</span>
+                                </label>
+                                <label class="border rounded-xl p-3 flex items-center gap-2 cursor-pointer hover:bg-rose-50" :class="checkoutForm.payment === 'card' ? 'border-rose-500 bg-rose-50/50' : 'border-gray-200'">
+                                    <input type="radio" x-model="checkoutForm.payment" value="card" class="text-rose-500">
+                                    <span class="text-xs font-bold text-gray-700">بطاقة ائتمان</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-gray-100">
+                            <div class="flex justify-between text-sm font-bold text-gray-800 mb-4">
+                                <span>المبلغ الإجمالي المترتب:</span>
+                                <span class="text-rose-600" x-text="cartTotal + ' ج.م'"></span>
+                            </div>
+
+                            <button type="submit" 
+                                    class="w-full py-3.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl shadow-lg transition-all">
+                                تأكيد الطلب الآن
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="quickViewModalOpen" class="relative z-50" x-cloak>
+        <div x-show="quickViewModalOpen" x-transition.opacity class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="quickViewModalOpen = false"></div>
+
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4">
+                <div x-show="selectedProduct !== null" 
+                     class="relative transform overflow-hidden rounded-3xl bg-white text-right shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-2xl p-6 sm:p-8">
+                    
+                    <button @click="quickViewModalOpen = false" class="absolute top-4 left-4 text-gray-400 hover:text-gray-600 z-10">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+
+                    <template x-if="selectedProduct">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                            <div class="relative bg-rose-50 rounded-2xl overflow-hidden h-64 sm:h-80">
+                                <img :src="selectedProduct.image" :alt="selectedProduct.title" class="w-full h-full object-cover">
+                            </div>
+
+                            <div class="space-y-3">
+                                <span class="text-xs font-bold text-rose-500 bg-rose-50 px-2.5 py-1 rounded-full" x-text="getCategoryLabel(selectedProduct.category)"></span>
+                                <h3 class="text-xl font-extrabold text-gray-800" x-text="selectedProduct.title"></h3>
+                                
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xl font-extrabold text-rose-600" x-text="selectedProduct.price + ' ج.م'"></span>
+                                    <template x-if="selectedProduct.originalPrice">
+                                        <span class="text-xs text-gray-400 line-through" x-text="selectedProduct.originalPrice + ' ج.م'"></span>
+                                    </template>
+                                </div>
+
+                                <p class="text-xs text-gray-600 leading-relaxed" x-text="selectedProduct.description"></p>
+
+                                <div class="border-t border-gray-100 pt-3 space-y-2">
+                                    <p class="text-xs font-bold text-gray-800"><i class="fas fa-vial text-rose-400 ml-1"></i> المكونات الرئيسية:</p>
+                                    <p class="text-xs text-gray-500" x-text="selectedProduct.ingredients"></p>
+                                </div>
+
+                                <div class="border-t border-gray-100 pt-3 space-y-2">
+                                    <p class="text-xs font-bold text-gray-800"><i class="fas fa-hand-holding-droplet text-rose-400 ml-1"></i> طريقة الاستخدام:</p>
+                                    <p class="text-xs text-gray-500" x-text="selectedProduct.usage"></p>
+                                </div>
+
+                                <button @click="addToCart(selectedProduct); quickViewModalOpen = false" 
+                                        class="w-full mt-4 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+                                    <i class="fas fa-shopping-bag"></i>
+                                    <span>إضافة إلى السلة</span>
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div x-show="toast.show" x-transition 
+         class="fixed bottom-5 right-5 z-50 bg-gray-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3" x-cloak>
+        <i class="fas fa-check-circle text-mint-500 text-lg"></i>
+        <span class="text-xs sm:text-sm font-bold" x-text="toast.message"></span>
+    </div>
+
+    <footer class="bg-gray-900 text-gray-300 pt-16 pb-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                
+                <!-- Brand Info -->
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white font-bold">
+                            <i class="fas fa-sparkles text-sm"></i>
+                        </div>
+                        <span class="text-xl font-black text-white font-tajawal">جلو سكين</span>
+                    </a>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        عالمك الخاص للعناية بالبشرة وبناء روتينك اليومي بمكونات آمنة وطبيعية لتعزيز إشراقة وجهك ونضارته.
+                    </p>
+                    <div class="flex gap-3 text-gray-400 pt-2">
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-colors"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4">روابط سريعة</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#featured" class="hover:text-rose-400 transition-colors">الرئيسية</a></li>
+                        <li><a href="#products" class="hover:text-rose-400 transition-colors">جميع المنتجات</a></li>
+                        <li><a href="#quiz" class="hover:text-rose-400 transition-colors">اختبار تحديد نوع البشرة</a></li>
+                        <li><a href="#" class="hover:text-rose-400 transition-colors">العروض والتخفيضات</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Care -->
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-4">خدمة العملاء</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#" class="hover:text-rose-400 transition-colors">سياسة الشحن والتوصيل</a></li>
+                        <li><a href="#" class="hover:text-rose-400 transition-colors">الإرجاع والاستبدال</a></li>
+                        <li><a href="#" class="hover:text-rose-400 transition-colors">الأسئلة الشائعة</a></li>
+                        <li><a href="#" class="hover:text-rose-400 transition-colors">تواصل معنا</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="text-white font-bold text-sm mb-2">النشرة البريدية</h4>
+                    <p class="text-xs text-gray-400 mb-4">اشتركي للحصول على نصائح للعناية بالبشرة وخصم 10% على أول طلب.</p>
+                    <form @submit.prevent="showToast('تم اشتراكك بنجاح في النشرة البريدية!')" class="space-y-2">
+                        <input type="email" required placeholder="بريدك الإلكتروني" 
+                               class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-rose-400">
+                        <button type="submit" class="w-full py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all">
+                            اشتركي الآن
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Copyright Footer -->
+            <div class="pt-8 border-t border-gray-800 text-center text-xs text-gray-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>© 2026 جميع الحقوق محفوظة لمتجر جلو سكين (Glow SkinCare).</p>
+                <div class="flex gap-4">
+                    <i class="fab fa-cc-visa text-lg text-gray-400"></i>
+                    <i class="fab fa-cc-mastercard text-lg text-gray-400"></i>
+                    <i class="fas fa-money-bill-wave text-lg text-gray-400"></i>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        function shopApp() {
+            return {
+                mobileMenuOpen: false,
+                cartOpen: false,
+                checkoutModalOpen: false,
+                quickViewModalOpen: false,
+                searchQuery: '',
+                selectedCategory: 'all',
+                quizSkinType: null,
+                selectedProduct: null,
+                
+                toast: {
+                    show: false,
+                    message: ''
+                },
+
+                checkoutForm: {
+                    name: '',
+                    phone: '',
+                    address: '',
+                    payment: 'cod'
+                },
+
+                cart: [],
+
+                // Skin Types for Quiz
+                skinTypes: [
+                    { id: 'oily', name: 'بشرة دهنية', icon: '✨', desc: 'إفرازات زهمية ولمعان مستمر' },
+                    { id: 'dry', name: 'بشرة جافة', icon: '💧', desc: 'شعور بالشد والجفاف أو التقشير' },
+                    { id: 'combination', name: 'بشرة مختلطة', icon: '⚖️', desc: 'دهنية في منطقة T-Zone وجافة في باقي الوجه' },
+                    { id: 'sensitive', name: 'بشرة حساسة', icon: '🌸', desc: 'سريعة التأثر والتنمل والاحمرار' }
+                ],
+
+                // Skincare Products Dataset
+                products: [
+                    {
+                        id: 1,
+                        title: "سيروم الهيالورونيك أسيد الفائق",
+                        category: "serum",
+                        price: 280,
+                        originalPrice: 350,
+                        discount: 20,
+                        rating: 4.9,
+                        reviewsCount: 128,
+                        isBestSeller: true,
+                        skinType: ["dry", "combination", "sensitive"],
+                        image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80",
+                        benefits: "يحتوي على 2% هيالورونيك أسيد نقي لترطيب عميق ومد يد العون للبشرة المجهدة.",
+                        description: "سيروم مكثف يعمل على اختراق طبقات البشرة لترطيبها وتعبئة الخطوط الدقيقة، مما يمنحها ملمساً ناعماً وإشراقة تدوم طويلاً.",
+                        ingredients: "هيالورونيك أسيد، فيتامين B5، ماء ورد طبيعي، جليسرين نباتي.",
+                        usage: "ضعي 3-4 قطرات على بشرة نظيفة ورطبة قليلاً صباحاً ومساءً قبل الكريم المرطب."
+                    },
+                    {
+                        id: 2,
+                        title: "غسول الوجه برغوة النياسيناميد",
+                        category: "face",
+                        price: 190,
+                        originalPrice: null,
+                        discount: null,
+                        rating: 4.7,
+                        reviewsCount: 95,
+                        isBestSeller: false,
+                        skinType: ["oily", "combination"],
+                        image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80",
+                        benefits: "ينظف المسام بلقاء ويتحكم في إفراز الزيوت دون إرجاع جفاف البشرة.",
+                        description: "غسول لطيف على البشرة ينظف الأوساخ والترسبات اليومية مع تقليل ظهور المسام الواسعة بفضل مادة النياسيناميد.",
+                        ingredients: "نياسيناميد 5%، مستخلص الشاي الأخضر، أحماض الفواكه المخففة.",
+                        usage: "دلكي كمية صغرى على وجه مبلل بحركات دائرية ثم اشطفيه بماء فاتر."
+                    },
+                    {
+                        id: 3,
+                        title: "واقي الشمس المرطب SPF 50+",
+                        category: "sunscreen",
+                        price: 320,
+                        originalPrice: 380,
+                        discount: 15,
+                        rating: 5.0,
+                        reviewsCount: 210,
+                        isBestSeller: true,
+                        skinType: ["oily", "dry", "combination", "sensitive"],
+                        image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=600&q=80",
+                        benefits: "حماية فائقة من أشعة الشمس الضارة UVA/UVB بدون ترك أي أثر أبيض.",
+                        description: "تركيبة مائية خفيفة سريعة الامتصاص تحمي البشرة من التصبغات والتجاعيد المبكرة الناتجة عن التعرض للشمس.",
+                        ingredients: "أكسيد الزنك، فيتامين E، مستخلص الصبار التايلاندي.",
+                        usage: " يوضع قبل التعرض للشمس بـ 15 دقيقة، ويجدد كل ساعتين."
+                    },
+                    {
+                        id: 4,
+                        title: "كريم الترطيب المكثف بسيراميد",
+                        category: "face",
+                        price: 260,
+                        originalPrice: 300,
+                        discount: 13,
+                        rating: 4.8,
+                        reviewsCount: 84,
+                        isBestSeller: false,
+                        skinType: ["dry", "sensitive"],
+                        image: "https://images.unsplash.com/photo-1608248597262-83813936644f?auto=format&fit=crop&w=600&q=80",
+                        benefits: "يعيد بناء حاجز البشرة الواقي ويعالج الجفاف الشديد والتهيج.",
+                        description: "كريم غني بالسيراميد وزبدة الشيا يمنحك راحة فورية وترطيباً يدوم 24 ساعة بدون حساسية.",
+                        ingredients: "سيراميد NP، زبدة الشيا العضوية، زيت الأرجان.",
+                        usage: "يُدهن على الوجه والرقبة مرتين يومياً بعد السيروم."
+                    },
+                    {
+                        id: 5,
+                        title: "سيروم فيتامين C المشرق",
+                        category: "serum",
+                        price: 340,
+                        originalPrice: 400,
+                        discount: 15,
+                        rating: 4.9,
+                        reviewsCount: 160,
+                        isBestSeller: true,
+                        skinType: ["dry", "combination"],
+                        image: "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=600&q=80",
+                        benefits: "يفتح البقع الداكنة ويوحد لون البشرة ليمنحها إشراقة زجاجية.",
+                        description: "تركيبة مركزة بفيتامين سي النشط ومضادات الأكسدة لمحاربة الشحوب وإعادة الحيوية والنضارة للوجه.",
+                        ingredients: "فيتامين C نقي 15%، حمض فيروليك، خلاصة البرتقال.",
+                        usage: "توضع 3 قطرات صباحاً قبل واقي الشمس تجنباً للأكسدة."
+                    },
+                    {
+                        id: 6,
+                        title: "مقشر وملمع الجسم بملح الهيمالايا",
+                        category: "body",
+                        price: 210,
+                        originalPrice: null,
+                        discount: null,
+                        rating: 4.6,
+                        reviewsCount: 42,
+                        isBestSeller: false,
+                        skinType: ["dry", "combination", "oily"],
+                        image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=600&q=80",
+                        benefits: "يزيل الخلايا الميتة وينعم الجلد ويتركه برائحة الورد الخزامى الفواحة.",
+                        description: "مقشر طبيعي مدعم بزيوت المرطبة يزيل الجلد الميت وينشط الدورة الدموية للحصول على ملمس حريري.",
+                        ingredients: "أملاح الهيمالايا الوردي، زيت اللوز الحلو، زيت اللافندر العطري.",
+                        usage: "يستخدم مرتين أسبوعياً على جسم مبلل بحركات دائرية ثم يشطف."
+                    }
+                ],
+
+                // Filtered Products Computed Logic
+                get filteredProducts() {
+                    return this.products.filter(product => {
+                        const matchesCategory = this.selectedCategory === 'all' || product.category === this.selectedCategory;
+                        const matchesSearch = product.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                              product.benefits.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        return matchesCategory && matchesSearch;
+                    });
+                },
+
+                // Cart Computations
+                get cartCount() {
+                    return this.cart.reduce((total, item) => total + item.quantity, 0);
+                },
+
+                get cartSubtotal() {
+                    return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+                },
+
+                get cartTotal() {
+                    const shipping = this.cartSubtotal >= 350 || this.cartSubtotal === 0 ? 0 : 35;
+                    return this.cartSubtotal + shipping;
+                },
+
+                // Actions
+                addToCart(product) {
+                    const existing = this.cart.find(item => item.id === product.id);
+                    if (existing) {
+                        existing.quantity++;
+                    } else {
+                        this.cart.push({
+                            id: product.id,
+                            title: product.title,
+                            price: product.price,
+                            image: product.image,
+                            quantity: 1
+                        });
+                    }
+                    this.showToast(`تمت إضافة "${product.title}" إلى السلة`);
+                },
+
+                updateQuantity(productId, delta) {
+                    const item = this.cart.find(i => i.id === productId);
+                    if (item) {
+                        item.quantity += delta;
+                        if (item.quantity <= 0) {
+                            this.removeFromCart(productId);
+                        }
+                    }
+                },
+
+                removeFromCart(productId) {
+                    this.cart = this.cart.filter(item => item.id !== productId);
+                    this.showToast("تم إزالة المنتج من السلة");
+                },
+
+                openQuickView(product) {
+                    this.selectedProduct = product;
+                    this.quickViewModalOpen = true;
+                },
+
+                getCategoryLabel(category) {
+                    const labels = {
+                        face: 'العناية بالوجه',
+                        serum: 'سيروم ورطوبة',
+                        sunscreen: 'واقي الشمس',
+                        body: 'العناية بالجسم'
+                    };
+                    return labels[category] || 'عام';
+                },
+
+                getSkinTypeName(typeId) {
+                    const type = this.skinTypes.find(t => t.id === typeId);
+                    return type ? type.name : '';
+                },
+
+                getSkinTypeAdvice(typeId) {
+                    const advice = {
+                        oily: 'تحتاج بشرتك إلى غسول لطيف ينظم الإفرازات الدهنية مع سيروم مرطب خفيف قائم على الماء.',
+                        dry: 'تستفيد بشرتك من السيروم المعزز بالهيالورونيك والكريمات الغنية بالسيراميد لحمايتها من التغرق.',
+                        combination: 'الخيار الأفضل لبشرتك هو تنظيم مناطق T-Zone مع ترطيب متوازن ومستهدف.',
+                        sensitive: 'البشرة الحساسة تتطلب تركيبة خالية من المعطرات مع واقي شمس معدني ومكونات مهدئة.'
+                    };
+                    return advice[typeId] || '';
+                },
+
+                getRecommendedProducts(typeId) {
+                    if (!typeId) return [];
+                    return this.products.filter(p => p.skinType.includes(typeId));
+                },
+
+                filterBySkinType(typeId) {
+                    this.selectedCategory = 'all';
+                    this.searchQuery = '';
+                    const section = document.getElementById('products');
+                    if (section) section.scrollIntoView({ behavior: 'smooth' });
+                },
+
+                submitOrder() {
+                    if (this.cart.length === 0) return;
+                    this.checkoutModalOpen = false;
+                    this.cart = [];
+                    this.showToast("شكراً لك! تم استلام طلبك بنجاح وسنتواصل معك قريباً.");
+                },
+
+                showToast(msg) {
+                    this.toast.message = msg;
+                    this.toast.show = true;
+                    setTimeout(() => {
+                        this.toast.show = false;
+                    }, 3500);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
